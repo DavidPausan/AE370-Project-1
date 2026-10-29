@@ -1,0 +1,6 @@
+Parameters: mu=398600.4418 km^3/s^2, Re=6378.137 km, J2=0.00108263, altitude=1000.0 km, inclination=50.0 deg, duration=86400.0 s, reference RK4 step=0.5 s.
+RK4 log-log order fitted on dt=3.75,7.5,15 s: 4.378864
+AB4 log-log order fitted on dt=3.75,7.5,15 s: 5.707579
+Error = Euclidean satellite position difference at t=86400 s in km.
+RHS call count includes all AB4 RK4-startup evaluations.
+These tests use the standalone solver in convergence.py, not a separately provided group solver.
