@@ -1,0 +1,37 @@
+name: AE370 Orbital Validation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy matplotlib
+
+      - name: Run validation tests
+        run: |
+          python validation.py
+
+      - name: Upload validation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: AE370-validation-results
+          path: |
+            validation_results.csv
+            validation_three_panel.png
+          if-no-files-found: error
