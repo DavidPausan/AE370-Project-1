@@ -22,18 +22,18 @@ grid = region_grid() #88 ground points of Korea.
 results = {}
 for dt in DTS:
     tic = time.time()
-    u, times = rk4(f,X0, T_END, dt)
+    u, times = rk4(f, X0, T_END, dt)
     run_time = time.time() - tic
 
-every = int(round(DT_COV/dt)) # the amount of steps that make up 60seconsd
-t_cov, n_min = min_in_view(u, times, grid, sample_every = every)
+    every = int(round(DT_COV/dt))  # the number of steps that make up 60 seconds
+    t_cov, n_min = min_in_view(u, times, grid, sample_every=every)
 
-results[dt] = {"final": u[-1].copy(), "n_min": n_min,
-               "Avail": stereo_availability(n_min), "run_time": run_time}
-del u #free the full history.
+    results[dt] = {"final": u[-1].copy(), "n_min": n_min,
+                   "avail": stereo_availability(n_min), "run_time": run_time}
+    del u  # free the full history
 
-print("dt = %5.1f s: run time %.1f s, stereo availability %.6f, min N = %d"
-        % (dt, run_time, results[dt]["avail"], n_min.min()))
+    print("dt = %5.1f s: run time %.1f s, stereo availability %.6f, min N = %d"
+          % (dt, run_time, results[dt]["avail"], n_min.min()))
 
 ref = results[DTS[0]]
 rows = []
@@ -44,9 +44,9 @@ for dt in DTS[1:]:
     mismatch = np.mean((results[dt]["n_min"] >= 2) != (ref["n_min"] >= 2))
     rows.append((dt, max_err, timing, results[dt]["avail"], mismatch))
 
-print("dt = %5.1f s: max position error %.3f km, timing error %.3f s, "
-        "availability %.6f, samples that differ %.4f %%"
-        % (dt, max_err, timing, results[dt]["avail"], 100 * mismatch))
+    print("dt = %5.1f s: max position error %.3f km, timing error %.3f s, "
+          "availability %.6f, samples that differ %.4f %%"
+          % (dt, max_err, timing, results[dt]["avail"], 100 * mismatch))
     
 dt_arr = np.array([r[0] for r in rows])
 timing_arr = np.array([r[2] for r in rows])
